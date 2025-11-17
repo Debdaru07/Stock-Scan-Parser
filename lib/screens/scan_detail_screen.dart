@@ -31,10 +31,8 @@ class ScanDetailScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => VariableValuesScreen(
-                    variableKey: p,
-                    spec: spec,
-                  ),
+                  builder: (_) =>
+                      VariableValuesScreen(variableKey: p, spec: spec),
                 ),
               );
             },
@@ -64,101 +62,105 @@ class ScanDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF07161A),
       appBar: AppBar(
-        title: Text(scan.name),
+        backgroundColor: const Color(0xFF07161A),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          scan.name,
+          style: const TextStyle(color: Colors.white),
+        ),
       ),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 700),
-          child: Container(
-            width: double.infinity,
-            color: const Color(0xFF07161A),
+          child: ListView(
             padding: const EdgeInsets.all(18),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Header box (blue)
-                Container(
-                  width: double.infinity,
-                  color: const Color(0xFF1982A1),
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        scan.name,
-                        style: const TextStyle(
-                          fontSize: 22,
-                          color: Colors.white,
-                        ),
+            children: [
+              // Header Blue Box
+              Container(
+                width: double.infinity,
+                color: const Color(0xFF1982A1),
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      scan.name,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        color: Colors.white,
                       ),
-                      const SizedBox(height: 6),
-                      Text(
-                        scan.tag,
-                        style: TextStyle(
-                          color: scan.color == 'red'
-                              ? Colors.redAccent
-                              : Colors.greenAccent,
-                        ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      scan.tag,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: scan.color == 'red'
+                            ? Colors.redAccent
+                            : Colors.greenAccent,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+              ),
 
-                const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: scan.criteria.length,
-                    itemBuilder: (_, i) {
-                      final c = scan.criteria[i];
+              // Criteria List
+              ...scan.criteria.asMap().entries.map((entry) {
+                final i = entry.key;
+                final c = entry.value;
 
-                      if (c.type == "plain_text") {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 14),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                c.text,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              if (i < scan.criteria.length - 1 &&
-                                  scan.criteria[i + 1].type == "plain_text")
-                                const Padding(
-                                  padding: EdgeInsets.only(top: 8.0),
-                                  child: Text(
-                                    "and",
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                            ],
+                // PLAIN TEXT
+                if (c.type == "plain_text") {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          c.text,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
                           ),
-                        );
-                      }
-
-                      // VARIABLE TYPE
-                      final variableMap = c.variables ?? {};
-
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: RichText(
-                          text: TextSpan(
-                              children: buildVariableText(
-                                  context, c.text, variableMap)),
                         ),
-                      );
-                    },
+                        if (i < scan.criteria.length - 1 &&
+                            scan.criteria[i + 1].type == "plain_text")
+                          const Padding(
+                            padding: EdgeInsets.only(top: 6),
+                            child: Text(
+                              "and",
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  );
+                }
+
+                // VARIABLE TYPE
+                final variableMap = c.variables ?? {};
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: RichText(
+                    text: TextSpan(
+                        children:
+                            buildVariableText(context, c.text, variableMap)),
                   ),
-                ),
-              ],
-            ),
+                );
+              }),
+            ],
           ),
         ),
       ),

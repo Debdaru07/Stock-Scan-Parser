@@ -16,14 +16,23 @@ class VariableValuesScreen extends StatelessWidget {
     final isValueType = spec.type == "value";
 
     return Scaffold(
+      backgroundColor: const Color(0xFF07161A),
       appBar: AppBar(
-        title: Text("Values for $variableKey"),
+        backgroundColor: const Color(0xFF07161A),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          "Values for $variableKey",
+          style: const TextStyle(color: Colors.white),
+        ),
       ),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 700),
           child: Container(
-            color: const Color(0xFF07161A),
             padding: const EdgeInsets.all(18),
             child: isValueType ? buildValueList() : buildIndicatorDetails(),
           ),
@@ -37,10 +46,11 @@ class VariableValuesScreen extends StatelessWidget {
 
     return ListView.separated(
       itemCount: values.length,
-      separatorBuilder: (_, __) => const Divider(color: Colors.grey),
+      separatorBuilder: (_, __) =>
+          const Divider(color: Colors.white24, height: 1),
       itemBuilder: (_, i) {
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
           child: Text(
             values[i].toString(),
             style: const TextStyle(
@@ -59,26 +69,20 @@ class VariableValuesScreen extends StatelessWidget {
       children: [
         Text(
           "Indicator: ${spec.studyType}",
-          style: const TextStyle(color: Colors.white, fontSize: 20),
+          style: const TextStyle(color: Colors.white, fontSize: 22),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 14),
         Text(
           "Parameter: ${spec.parameterName}",
-          style: const TextStyle(color: Colors.white, fontSize: 20),
+          style: const TextStyle(color: Colors.white, fontSize: 22),
         ),
-        const SizedBox(height: 12),
-        Text(
-          "Min: ${spec.minValue}",
-          style: const TextStyle(color: Colors.white),
-        ),
-        Text(
-          "Max: ${spec.maxValue}",
-          style: const TextStyle(color: Colors.white),
-        ),
-        Text(
-          "Default: ${spec.defaultValue}",
-          style: const TextStyle(color: Colors.white),
-        ),
+        const SizedBox(height: 20),
+        Text("Min: ${spec.minValue}",
+            style: const TextStyle(color: Colors.white, fontSize: 18)),
+        Text("Max: ${spec.maxValue}",
+            style: const TextStyle(color: Colors.white, fontSize: 18)),
+        Text("Default: ${spec.defaultValue}",
+            style: const TextStyle(color: Colors.white, fontSize: 18)),
       ],
     );
   }
