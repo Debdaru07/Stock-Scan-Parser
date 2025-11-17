@@ -83,7 +83,7 @@ class VariableValuesScreen extends StatelessWidget {
               style: const TextStyle(color: Colors.white, fontSize: 18)),
           Text("Max: ${spec.maxValue}",
               style: const TextStyle(color: Colors.white, fontSize: 18)),
-          Text("Default: ${spec.defaultValue}",
+          Text("Default: ${spec.defaultValue ?? '--'}",
               style: const TextStyle(color: Colors.white, fontSize: 18)),
         ],
       ),
