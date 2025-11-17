@@ -1,5 +1,6 @@
 name: stock_scan_parser
 description: Mobile replica for Stock Scan Parser assignment (Clean Architecture)
+version: 1.0.0+1
 publish_to: "none"
 environment:
   sdk: ">=2.18.0 <4.0.0"
