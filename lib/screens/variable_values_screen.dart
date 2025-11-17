@@ -20,23 +20,18 @@ class VariableValuesScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color(0xFF07161A),
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: BackButton(color: Colors.white),
         title: Text(
           "Values for $variableKey",
           style: const TextStyle(color: Colors.white),
         ),
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 700),
-          child: Container(
-            padding: const EdgeInsets.all(18),
-            child: isValueType ? buildValueList() : buildIndicatorDetails(),
-          ),
-        ),
+
+      // 🔥 No padding, no centering, full width layout
+      body: Container(
+        width: double.infinity,
+        color: const Color(0xFF07161A),
+        child: isValueType ? buildValueList() : buildIndicatorDetails(),
       ),
     );
   }
@@ -45,14 +40,18 @@ class VariableValuesScreen extends StatelessWidget {
     final values = spec.values ?? [];
 
     return ListView.separated(
+      padding:
+          const EdgeInsets.symmetric(vertical: 20), // 🔥 No horizontal padding
       itemCount: values.length,
       separatorBuilder: (_, __) =>
           const Divider(color: Colors.white24, height: 1),
       itemBuilder: (_, i) {
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+          padding: const EdgeInsets.symmetric(
+              vertical: 16, horizontal: 0), // 🔥 No side padding
           child: Text(
             values[i].toString(),
+            textAlign: TextAlign.left,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 22,
@@ -64,26 +63,30 @@ class VariableValuesScreen extends StatelessWidget {
   }
 
   Widget buildIndicatorDetails() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Indicator: ${spec.studyType}",
-          style: const TextStyle(color: Colors.white, fontSize: 22),
-        ),
-        const SizedBox(height: 14),
-        Text(
-          "Parameter: ${spec.parameterName}",
-          style: const TextStyle(color: Colors.white, fontSize: 22),
-        ),
-        const SizedBox(height: 20),
-        Text("Min: ${spec.minValue}",
-            style: const TextStyle(color: Colors.white, fontSize: 18)),
-        Text("Max: ${spec.maxValue}",
-            style: const TextStyle(color: Colors.white, fontSize: 18)),
-        Text("Default: ${spec.defaultValue}",
-            style: const TextStyle(color: Colors.white, fontSize: 18)),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(
+          top: 30, left: 20, right: 20), // minimal padding like web
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Indicator: ${spec.studyType}",
+            style: const TextStyle(color: Colors.white, fontSize: 22),
+          ),
+          const SizedBox(height: 14),
+          Text(
+            "Parameter: ${spec.parameterName}",
+            style: const TextStyle(color: Colors.white, fontSize: 22),
+          ),
+          const SizedBox(height: 20),
+          Text("Min: ${spec.minValue}",
+              style: const TextStyle(color: Colors.white, fontSize: 18)),
+          Text("Max: ${spec.maxValue}",
+              style: const TextStyle(color: Colors.white, fontSize: 18)),
+          Text("Default: ${spec.defaultValue}",
+              style: const TextStyle(color: Colors.white, fontSize: 18)),
+        ],
+      ),
     );
   }
 }

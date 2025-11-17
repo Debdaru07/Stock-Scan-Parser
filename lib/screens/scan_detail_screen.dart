@@ -26,6 +26,8 @@ class ScanDetailScreen extends StatelessWidget {
       if (p.startsWith(r'$') && vars.containsKey(p)) {
         final spec = vars[p]!;
         return WidgetSpan(
+          alignment: PlaceholderAlignment.baseline,
+          baseline: TextBaseline.alphabetic,
           child: GestureDetector(
             onTap: () {
               Navigator.push(
@@ -43,6 +45,7 @@ class ScanDetailScreen extends StatelessWidget {
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 decoration: TextDecoration.underline,
+                height: 1.2,
               ),
             ),
           ),
@@ -53,6 +56,7 @@ class ScanDetailScreen extends StatelessWidget {
           style: const TextStyle(
             fontSize: 20,
             color: Colors.white,
+            height: 1.2,
           ),
         );
       }
@@ -66,10 +70,7 @@ class ScanDetailScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color(0xFF07161A),
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: BackButton(color: Colors.white),
         title: Text(
           scan.name,
           style: const TextStyle(color: Colors.white),
@@ -81,7 +82,6 @@ class ScanDetailScreen extends StatelessWidget {
           child: ListView(
             padding: const EdgeInsets.all(18),
             children: [
-              // Header Blue Box
               Container(
                 width: double.infinity,
                 color: const Color(0xFF1982A1),
@@ -109,15 +109,11 @@ class ScanDetailScreen extends StatelessWidget {
                   ],
                 ),
               ),
-
               const SizedBox(height: 20),
-
-              // Criteria List
               ...scan.criteria.asMap().entries.map((entry) {
                 final i = entry.key;
                 final c = entry.value;
 
-                // PLAIN TEXT
                 if (c.type == "plain_text") {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 18),
@@ -148,15 +144,14 @@ class ScanDetailScreen extends StatelessWidget {
                   );
                 }
 
-                // VARIABLE TYPE
                 final variableMap = c.variables ?? {};
 
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: RichText(
                     text: TextSpan(
-                        children:
-                            buildVariableText(context, c.text, variableMap)),
+                      children: buildVariableText(context, c.text, variableMap),
+                    ),
                   ),
                 );
               }),
